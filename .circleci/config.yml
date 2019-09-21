@@ -1,9 +1,24 @@
-steps:
-  - run:
-      name: Install JUnit coverage reporter
-      command: yarn add --dev jest-junit
-  - run:
-      name: Run tests with JUnit as reporter
-      command: jest --ci --runInBand --reporters=default --reporters=jest-junit
-      environment:
-        JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/fizzbuzz
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run: npm install
+      - run: npm install jest-junit --save-dev
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run:
+        name: Run Test
+        command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+        environment:
+          JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
