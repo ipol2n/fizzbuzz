@@ -13,16 +13,15 @@ jobs:
             - v1-dependencies-
       - run: npm install
       - run: npm install jest-junit
-      - run: sudo npm install -g jest
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run:
           name: Run Test
-          command: mkdir test-results && jest --ci --runInBand --reporters=default --reporters=jest-junit
+          command: mkdir test-results && ./node_modules/.bin/jest --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
-            JEST_JUNIT_OUTPUT: test-results/jest/test-results.xml
+            JEST_JUNIT_OUTPUT: test-results/jest/results.xml
       - store_artifacts:
           path: test-results
           prefix: test
