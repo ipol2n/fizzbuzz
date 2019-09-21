@@ -12,7 +12,8 @@ jobs:
             - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
       - run: npm install
-      - run: sudo npm install -g jest jest-junit
+      - run: npm install jest-junit
+      - run: sudo npm install -g jest
       - save_cache:
           paths:
             - node_modules
