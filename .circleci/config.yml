@@ -20,6 +20,11 @@ jobs:
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run:
           name: Run Test
-          command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+          command: mkdir test-results && jest --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
-            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+            JEST_JUNIT_OUTPUT: test-results/jest/test-results.xml
+      - store_artifacts:
+          path: test-results
+          prefix: test
+      - store_test_results:
+          path: test-results
